@@ -130,6 +130,7 @@ class Config:
 
     def uninstall_deps(self):
         """Remove the sources location."""
+        shell.cd(os.path.dirname(self.location_path))
         shell.rm(self.location_path)
         common.show()
 

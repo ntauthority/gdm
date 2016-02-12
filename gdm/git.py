@@ -19,6 +19,9 @@ def clone(repo, path, *, cache=None):
     """Clone a new Git repository."""
     cache = cache or os.path.expanduser("~/.gitcache")
 
+    if not os.path.isdir(cache):
+        os.makedirs(cache)
+
     name = repo.split('/')[-1]
     if name.endswith(".git"):
         name = name[:-4]

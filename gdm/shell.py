@@ -2,8 +2,12 @@
 
 import os
 import logging
+import platform
 
-from sh import Command, ErrorReturnCode
+if platform.system() == 'Windows':
+    import pbs as sh
+else:
+    import sh
 
 from . import common
 from .exceptions import ShellError
@@ -26,15 +30,15 @@ def call(name, *args, _show=True, _capture=False, _ignore=False):
         return os.chdir(args[0])
 
     try:
-        program = Command(name)
+        program = sh.Command(name)
         if _capture:
             line = program(*args).strip()
             log.debug(OUT_PREFIX + line)
             return line
         else:
-            for line in program(*args, _iter='err'):
-                log.debug(OUT_PREFIX + line.strip())
-    except ErrorReturnCode as exc:
+            line = program(*args)
+            log.debug(OUT_PREFIX + line.strip())
+    except sh.ErrorReturnCode as exc:
         msg = "\n  IN: '{}'{}".format(os.getcwd(), exc)
         if _ignore:
             log.debug("Ignored error from call to '%s'", name)

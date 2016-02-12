@@ -2,6 +2,13 @@
 
 """Setup script for GDM."""
 
+import platform
+
+sh = 'sh ~= 1.11'
+
+if platform.system() == 'Windows':
+    sh = 'pbs'
+
 import setuptools
 
 from gdm import __project__, __version__, CLI, PLUGIN, DESCRIPTION
@@ -50,5 +57,5 @@ setuptools.setup(
         'Topic :: System :: Software Distribution',
     ],
 
-    install_requires=open('requirements.txt').readlines(),
+    install_requires=open('requirements.txt').readlines() + [ sh ],
 )
